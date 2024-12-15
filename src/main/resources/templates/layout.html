@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title th:remove="all">Layout</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+</head>
+<body>
+<header>
+    <h1>Сеть продуктовых магазинов</h1>
+    <nav>
+        <a th:href="@{/}">Главная</a>
+        <a th:href="@{/stores}">Магазины</a>
+        <a th:href="@{/products}">Товары</a>
+        <a th:href="@{/requests}">Заявки</a>
+<!--        <a th:href="@{/invoices}" th:if="${#authorization.expression('hasRole(''ADMIN'')}">Накладные</a>-->
+<!--        <a th:href="@{/sales}" th:if="${#authorization.expression('hasRole(''MANAGER'')}">Продажи</a>-->
+<!--        <a th:href="@{/login}" th:if="${#authorization.expression('isAnonymous()')}">Войти</a>-->
+<!--        <a th:href="@{/logout}" th:if="${#authorization.expression('isAuthenticated()')}">Выйти</a>-->
+    </nav>
+</header>
+
+<main>
+    <div th:fragment="content">
+        <!-- Содержимое страницы -->
+    </div>
+</main>
+
+<footer>
+    <p>© 2024 Grocery Chain</p>
+</footer>
+</body>
+</html>

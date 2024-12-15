@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создать магазин</title>
+</head>
+<body>
+<h1>Создать новый магазин</h1>
+
+<form th:action="@{/admin/create-store}" method="post">
+    <label for="name">Название:</label>
+    <input type="text" id="name" name="name" required><br>
+
+    <label for="address">Адрес:</label>
+    <input type="text" id="address" name="address" required><br>
+
+    <label for="phoneNumber">Телефон:</label>
+    <input type="text" id="phoneNumber" name="phoneNumber" required><br>
+
+    <label for="managerName">Имя менеджера:</label>
+    <input type="text" id="managerName" name="managerName" required><br>
+
+    <label for="username">Логин менеджера:</label>
+    <input type="text" id="username" name="username" required><br>
+
+    <label for="password">Пароль менеджера:</label>
+    <input type="password" id="password" name="password" required><br>
+
+    <button type="submit">Создать</button>
+</form>
+</body>
+</html>

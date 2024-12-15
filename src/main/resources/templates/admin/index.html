@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Admin Panel</title>
+</head>
+<body>
+<h1>Добро пожаловать в панель администратора</h1>
+
+<nav>
+    <ul>
+        <li><a th:href="@{/admin/create-store}">Создать новый магазин</a></li>
+        <!-- Добавьте другие ссылки для управления магазинами -->
+    </ul>
+</nav>
+
+<h2>Список магазинов</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Адрес</th>
+        <th>Телефон</th>
+        <th>Менеджер</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="store : ${stores}">
+        <td th:text="${store.id}"></td>
+        <td th:text="${store.name}"></td>
+        <td th:text="${store.address}"></td>
+        <td th:text="${store.phoneNumber}"></td>
+        <td th:text="${store.managerName}"></td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

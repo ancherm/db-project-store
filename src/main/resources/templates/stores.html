@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="~{layout :: content}">
+<head>
+    <title>Список магазинов</title>
+</head>
+<body>
+<h1>Список магазинов</h1>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Адрес</th>
+        <th>Телефон</th>
+        <th>Менеджер</th>
+    </tr>
+    <tr th:each="store : ${stores}">
+        <td th:text="${store.id}"></td>
+        <td th:text="${store.name}"></td>
+        <td th:text="${store.address}"></td>
+        <td th:text="${store.phoneNumber}"></td>
+        <td th:text="${store.managerName}"></td>
+    </tr>
+</table>
+</body>
+</html>

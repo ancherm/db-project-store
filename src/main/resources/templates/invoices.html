@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="~{layout :: content}">
+<head>
+    <title>Накладные</title>
+</head>
+<body>
+<h1>Список накладных</h1>
+<table border="1">
+    <tr>
+        <th>ID</th>
+        <th>Магазин</th>
+        <th>Дата выдачи</th>
+    </tr>
+    <tr th:each="inv : ${invoices}">
+        <td th:text="${inv.id}"></td>
+        <td th:text="${inv.store_name}"></td>
+        <td th:text="${inv.issue_date}"></td>
+    </tr>
+</table>
+</body>
+</html>

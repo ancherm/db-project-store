@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="~{layout :: content}">
+<head>
+    <title>Создание заявки</title>
+</head>
+<body>
+<h1>Создать заявку</h1>
+<form th:action="@{/requests/create}" method="post">
+    <div>
+        <label>Магазин:</label>
+        <select name="storeId">
+            <option th:each="store : ${stores}"
+                    th:value="${store.id}"
+                    th:text="${store.name}"></option>
+        </select>
+    </div>
+    <h2>Товары:</h2>
+    <table>
+        <tr>
+            <th>Товар</th>
+            <th>Количество</th>
+        </tr>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.name}"></td>
+            <td>
+                <input type="number" name="${product.id}" min="0" value="0"/>
+            </td>
+        </tr>
+    </table>
+    <button type="submit">Отправить заявку</button>
+</form>
+</body>
+</html>

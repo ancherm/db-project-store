@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="~{layout :: content}">
+<head>
+  <title>Заявки</title>
+</head>
+<body>
+<h1>Список заявок</h1>
+<a th:href="@{/requests/create}">Создать новую заявку</a>
+<table border="1">
+  <tr>
+    <th>ID</th>
+    <th>Магазин</th>
+    <th>Дата</th>
+    <th>Статус</th>
+    <th>Действия</th>
+  </tr>
+  <tr th:each="r : ${requests}">
+    <td th:text="${r.id}">1</td>
+    <td th:text="${r.store_name}">Store</td>
+    <td th:text="${r.request_date}">2024-12-01</td>
+    <td th:text="${r.request_status}">Pending</td>
+    <td>
+      <form th:action="@{/requests/approve}" method="post">
+        <input type="hidden" name="requestId" th:value="${r.id}"/>
+        <button type="submit" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">Одобрить</button>
+      </form>
+      <form th:action="@{/requests/invoice}" method="post">
+        <input type="hidden" name="requestId" th:value="${r.id}"/>
+        <button type="submit" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">Создать накладную</button>
+      </form>
+    </td>
+  </tr>
+</table>
+</body>
+</html>
