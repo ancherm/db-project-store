@@ -25,5 +25,9 @@ public class StoreService {
         storeRepository.addStoreWithManager(name, address, phoneNumber, managerName, username, encodedPassword);
     }
 
+    public Store getStoreByManager(String username) {
+        return storeRepository.getStoreByManager(username);
+    }
+
 
 }

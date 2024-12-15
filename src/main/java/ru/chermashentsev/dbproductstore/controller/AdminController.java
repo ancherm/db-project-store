@@ -17,7 +17,7 @@ public class AdminController {
 
     private final StoreService storeService;
 
-    @GetMapping("/index")
+    @GetMapping("/")
     public String adminIndex(Model model) {
         model.addAttribute("stores", storeService.getAllStores());
         return "admin/index";
@@ -37,7 +37,7 @@ public class AdminController {
             @RequestParam String username,
             @RequestParam String password) {
         storeService.createStoreWithManager(name, address, phoneNumber, managerName, username, password);
-        return "redirect:/admin/index";
+        return "redirect:/admin/";
     }
 }
 

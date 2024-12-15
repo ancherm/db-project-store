@@ -11,7 +11,7 @@ public class RedirectController {
     public String defaultAfterLogin(Authentication authentication) {
         if (authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_admin"))) {
-            return "redirect:/admin/index";
+            return "redirect:/admin/";
         } else if (authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_manager"))) {
             return "redirect:/manager/index";

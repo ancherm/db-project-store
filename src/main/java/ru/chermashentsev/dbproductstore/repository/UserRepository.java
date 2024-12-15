@@ -38,4 +38,11 @@ public class UserRepository {
             return user;
         });
     }
+
+    public void updatePassword(String username, String encryptedPassword) {
+        jdbcTemplate.update("CALL update_user_password(?, ?)", username, encryptedPassword);
+    }
+
+
+
 }

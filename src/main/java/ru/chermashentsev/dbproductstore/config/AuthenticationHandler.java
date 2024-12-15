@@ -22,13 +22,13 @@ public class AuthenticationHandler implements AuthenticationSuccessHandler {
         authorities.forEach(authority -> {
             if (authority.getAuthority().equals("ROLE_admin")) {
                 try {
-                    response.sendRedirect("/admin/index");
+                    response.sendRedirect("/admin/");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             } else if (authority.getAuthority().equals("ROLE_manager")) {
                 try {
-                    response.sendRedirect("/");
+                    response.sendRedirect("/manager/");
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

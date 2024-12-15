@@ -34,5 +34,20 @@ public class StoreRepository {
         jdbcTemplate.update(sql, name, address, phoneNumber, managerName, username, password);
     }
 
+    public Store getStoreByManager(String username) {
+        return jdbcTemplate.queryForObject(
+                "CALL get_store_by_manager(?)",
+                (rs, rowNum) -> {
+                    Store store = new Store();
+                    store.setId(rs.getInt("id"));
+                    store.setName(rs.getString("name"));
+                    store.setAddress(rs.getString("address"));
+                    store.setPhoneNumber(rs.getString("phone_number"));
+                    return store;
+                },
+                username // Передаем параметр
+        );
+    }
+
 
 }
