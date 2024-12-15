@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Create Sale Report</title>
+</head>
+<body>
+<h1>Create Sale Report</h1>
+<form method="post" th:action="@{/sales/create}">
+    <div>
+        <label for="storeId">Store ID:</label>
+        <input type="number" id="storeId" name="storeId" required>
+    </div>
+    <div>
+        <label for="productId">Product ID:</label>
+        <input type="number" id="productId" name="productId" required>
+    </div>
+    <div>
+        <label for="quantitySold">Quantity Sold:</label>
+        <input type="number" id="quantitySold" name="quantitySold" required>
+    </div>
+    <div>
+        <button type="submit">Submit</button>
+    </div>
+</form>
+<a th:href="@{/}">Back to Home</a>
+</body>
+</html>

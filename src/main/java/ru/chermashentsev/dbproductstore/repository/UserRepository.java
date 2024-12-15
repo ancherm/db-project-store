@@ -28,7 +28,7 @@ public class UserRepository {
 //            boolean enabled = callableStatement.getBoolean(4);
 
             if (passwordHash == null) {
-                return null; // Пользователь не найден
+                return null;
             }
 
             User user = new User();

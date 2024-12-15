@@ -3,6 +3,7 @@ package ru.chermashentsev.dbproductstore.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.chermashentsev.dbproductstore.model.Product;
+import ru.chermashentsev.dbproductstore.model.ProductWithQuantity;
 import ru.chermashentsev.dbproductstore.repository.ProductRepository;
 
 import java.util.List;
@@ -11,27 +12,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ProductService {
 
-    private final ProductRepository productsRepository;
+    private final ProductRepository productRepository;
 
 
     public List<Product> getAll() {
-        return productsRepository.findAll();
+        return productRepository.findAll();
     }
 
     public void addProduct(Product product) {
-        productsRepository.addProduct(product);
+        productRepository.addProduct(product);
+    }
+
+    public List<Product> getProductsByStoreId(int storeId) {
+        return productRepository.getProductsByStoreId(storeId);
     }
 
     public int getStoreInventory(int storeId, int productId) {
-        return productsRepository.getStoreInventory(storeId, productId);
+        return productRepository.getStoreInventory(storeId, productId);
     }
 
+    public List<ProductWithQuantity> getProductsWithQuantityByStoreId(int storeId) {
+        return productRepository.findProductsWithQuantityByStoreId(storeId);
+    }
+
+
     public void updateProduct(Product product) {
-        productsRepository.updateProduct(product);
+        productRepository.updateProduct(product);
     }
 
     public void deleteProduct(int id) {
-        productsRepository.deleteProduct(id);
+        productRepository.deleteProduct(id);
     }
 
 }

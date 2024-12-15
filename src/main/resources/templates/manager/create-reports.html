@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/reports/create" method="post">
+    <table>
+        <tr th:each="product : ${products}">
+            <td th:text="${product.name}">Product Name</td>
+            <td><input type="number" name="${product.id}" min="0"></td>
+        </tr>
+    </table>
+    <button type="submit">Отправить отчет</button>
+</form>
+
+</body>
+</html>

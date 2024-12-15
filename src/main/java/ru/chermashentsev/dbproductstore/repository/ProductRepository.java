@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 import ru.chermashentsev.dbproductstore.model.Product;
+import ru.chermashentsev.dbproductstore.model.ProductWithQuantity;
 import ru.chermashentsev.dbproductstore.model.Store;
 
 import java.util.List;
@@ -13,7 +14,6 @@ import java.util.List;
 public class ProductRepository {
 
     private final JdbcTemplate jdbcTemplate;
-
 
 
     public List<Product> findAll() {
@@ -30,9 +30,40 @@ public class ProductRepository {
         );
     }
 
+    public List<ProductWithQuantity> findProductsWithQuantityByStoreId(int storeId) {
+        return jdbcTemplate.query(
+                "CALL get_products_with_quantity_by_store_id(?);",
+                (rs, rowNum) -> {
+                    ProductWithQuantity product = new ProductWithQuantity();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setCategory(rs.getString("category"));
+                    product.setUnitPrice(rs.getBigDecimal("unit_price"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    return product;
+                },
+                storeId
+        );
+    }
+
     public int getStoreInventory(int storeId, int productId) {
         String sql = "SELECT get_store_inventory(?, ?) AS inv";
         return jdbcTemplate.queryForObject(sql, new Object[]{storeId, productId}, Integer.class);
+    }
+
+    public List<Product> getProductsByStoreId(int storeId) {
+        String sql = "CALL get_products_by_store_id(?)";
+        return jdbcTemplate.query(sql,
+                (rs, rowNum) -> {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setCategory(rs.getString("category"));
+                    product.setUnitPrice(rs.getBigDecimal("unit_price"));
+                    return product;
+                },
+                storeId
+        );
     }
 
     public void addProduct(Product product) {

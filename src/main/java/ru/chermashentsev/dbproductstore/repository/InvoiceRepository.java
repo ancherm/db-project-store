@@ -15,9 +15,6 @@ public class InvoiceRepository {
     private final JdbcTemplate jdbcTemplate;
 
 
-    /**
-     * Генерирует накладную для указанной заявки и возвращает ID созданной накладной.
-     */
     public int generateInvoiceForRequest(int requestId) {
         SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
                 .withProcedureName("generate_invoice_for_request");

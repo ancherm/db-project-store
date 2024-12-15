@@ -1,12 +1,15 @@
 package ru.chermashentsev.dbproductstore.repository;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.jdbc.core.CallableStatementCreator;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import ru.chermashentsev.dbproductstore.model.Product;
 import ru.chermashentsev.dbproductstore.model.Request;
+import ru.chermashentsev.dbproductstore.model.RequestDetail;
 
+import java.sql.CallableStatement;
 import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -33,36 +36,53 @@ public class RequestRepository {
         );
     }
 
-    /**
-     * Создает новую заявку и возвращает её ID.
-     */
-    public int addRequest(int storeId, Date requestDate) {
-        // Используем SimpleJdbcCall для получения OUT параметра
-        SimpleJdbcCall call = new SimpleJdbcCall(jdbcTemplate)
-                .withProcedureName("add_request");
-
-        Map<String, Object> in = new HashMap<>();
-        in.put("p_store_id", storeId);
-        in.put("p_request_date", requestDate);
-
-        Map<String, Object> out = call.execute(in);
-        // Допустим OUT параметр называется p_request_id
-        return ((Number) out.get("p_request_id")).intValue();
+    public List<RequestDetail> findAllRequestDetails() {
+        return jdbcTemplate.query(
+                "CALL get_all_request_details();",
+                (rs, rowNum) -> {
+                    RequestDetail request = new RequestDetail();
+                    request.setId(rs.getInt("id"));
+                    request.setRequestId(rs.getInt("request_id"));
+                    request.setProductId(rs.getInt("product_id"));
+                    request.setQuantity(rs.getInt("quantity_requested"));
+                    return request;
+                }
+        );
     }
 
-    /**
-     * Добавляет строку в заявку (детали заявки).
-     */
-    public void addRequestDetail(int requestId, int productId, int quantityRequested) {
-        String sql = "CALL add_request_detail(?, ?, ?)";
-        jdbcTemplate.update(sql, requestId, productId, quantityRequested);
+    public int createRequest(int storeId, Date requestDate) {
+        String sql = "CALL create_request(?, ?, ?)";
+        CallableStatementCreator callableStatementCreator = connection -> {
+            CallableStatement callableStatement = connection.prepareCall(sql);
+            callableStatement.setInt(1, storeId);
+            callableStatement.setDate(2, requestDate);
+            callableStatement.registerOutParameter(3, java.sql.Types.INTEGER);
+            return callableStatement;
+        };
+
+        return jdbcTemplate.execute(callableStatementCreator, callableStatement -> {
+            callableStatement.execute();
+            return callableStatement.getInt(3);
+        });
     }
 
-    /**
-     * Утверждает (одобряет) заявку.
-     */
+    public void addRequestDetail(int requestId, int productId, int quantity) {
+        jdbcTemplate.update("CALL add_request_detail(?, ?, ?)", requestId, productId, quantity);
+    }
+
+
     public void approveRequest(int requestId) {
-        String sql = "CALL approve_request(?)";
-        jdbcTemplate.update(sql, requestId);
+        jdbcTemplate.update("CALL approve_request(?)", requestId);
     }
+
+    public void rejectRequest(int requestId) {
+        jdbcTemplate.update("CALL reject_request(?)", requestId);
+    }
+
+    public void updateStoreInventory(int storeId, int productId, int quantity) {
+        jdbcTemplate.update("CALL update_store_inventory(?, ?, ?)", storeId, productId, quantity);
+    }
+
+
+
 }

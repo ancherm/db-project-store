@@ -6,15 +6,17 @@
 <body>
 <h2>Добро пожаловать!</h2>
 <p>Здесь вы можете управлять данными сети продуктовых магазинов:</p>
+
 <ul>
+    <li><a th:href="@{/login}">Логин</a></li>
     <li><a th:href="@{/stores}">Просмотреть список магазинов</a></li>
-    <li><a th:href="@{/products}">Посмотреть доступные товары</a></li>
-    <li><a th:href="@{/requests}">Просмотреть или создать заявки</a></li>
+<!--    <li><a th:href="@{/products}">Посмотреть доступные товары</a></li>-->
+<!--    <li><a th:href="@{/requests}">Просмотреть или создать заявки</a></li>-->
 <!--    <li th:if="${#authorization.expression('hasRole(''ADMIN'')}">-->
-        <a th:href="@{/invoices}">Управление накладными</a>
+<!--        <a th:href="@{/invoices}">Управление накладными</a>-->
 <!--    </li>-->
 <!--    <li th:if="${#authorization.expression('hasRole(''MANAGER'')}">-->
-        <a th:href="@{/sales}">Просмотр продаж</a>
+<!--        <a th:href="@{/sales}">Просмотр продаж</a>-->
 <!--    </li>-->
 </ul>
 </body>

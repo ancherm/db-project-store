@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Создать Заявку</title>
+</head>
+<body>
+<header>
+    <h1>Создать Заявку</h1>
+    <nav>
+        <a th:href="@{/manager/index}">Вернуться на главную</a>
+<!--        <a href="/logout">Выйти</a>-->
+    </nav>
+</header>
+
+<main>
+    <form th:action="@{/manager/create-request}" method="post">
+        <div th:each="product : ${products}">
+            <label th:for="${product.id}" th:text="${product.name}"></label>
+            <input type="number" th:id="${product.id}" th:name="${product.id}" min="0">
+        </div>
+        <button type="submit">Отправить Заявку</button>
+    </form>
+</main>
+</body>
+</html>

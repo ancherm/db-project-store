@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Все отчёты о продажах</title>
+</head>
+<body>
+<h1>Все отчёты о продажах</h1>
+
+<table border="1">
+    <thead>
+    <tr>
+        <th>Магазин</th>
+        <th>Дата отправки</th>
+        <th>Идентификатор продукта</th>
+        <th>Количество проданных единиц</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="group : ${groupedSales}">
+        <td th:text="${group.storeName}" rowspan="${#lists.size(group.sales)}"></td>
+        <td th:text="${group.reportDate}" rowspan="${#lists.size(group.sales)}"></td>
+        <td th:each="sale : ${group.sales}" th:text="${sale.productId}"></td>
+        <td th:each="sale : ${group.sales}" th:text="${sale.totalQuantitySold}"></td>
+    </tr>
+    </tbody>
+</table>

@@ -21,6 +21,10 @@ public class StoreService {
         return storeRepository.findAll();
     }
 
+    public Store getStoreById(int storeId) {
+        return storeRepository.getStoreById(storeId);
+    }
+
     public void createStoreWithManager(String name, String address, String phoneNumber, String managerName, String username, String password) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(password);

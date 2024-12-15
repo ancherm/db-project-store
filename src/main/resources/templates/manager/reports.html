@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Мои отчеты о продажах</title>
+</head>
+<body>
+<h1>Отчеты о продажах</h1>
+<table>
+    <thead>
+    <tr>
+        <th>Название товара</th>
+        <th>Количество</th>
+        <th>Дата продажи</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="report : ${reports}">
+        <td th:text="${report.productId}">Product ID</td>
+        <td th:text="${report.quantitySold}">Quantity</td>
+        <td th:text="${report.saleDate}">Date</td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

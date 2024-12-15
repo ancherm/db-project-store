@@ -6,7 +6,7 @@
 </head>
 <body>
 <header>
-    <h1>Добро пожаловать, Менеджер!</h1>
+    <h1>Добро пожаловать!</h1>
     <nav>
         <a href="/logout">Выйти</a>
     </nav>
@@ -64,12 +64,13 @@
             </thead>
             <tbody>
             <tr th:each="sale : ${sales}">
-                <td th:text="${sale.name}"></td>
-                <td th:text="${sale.category}"></td>
+                <td th:text="${sale.productName}"></td> <!-- Исправлено -->
+                <td th:text="${sale.productCategory}"></td> <!-- Исправлено -->
                 <td th:text="${sale.unitPrice}"></td>
                 <td th:text="${sale.quantitySold}"></td>
                 <td th:text="${sale.saleDate}"></td>
             </tr>
+
             </tbody>
         </table>
     </section>
@@ -80,10 +81,13 @@
     <section>
         <h2>Действия</h2>
         <ul>
-            <li><a href="/requests/create">Создать запрос на поставку</a></li>
             <li><a href="/manager/change-password">Изменить пароль</a></li>
+            <li><a href="/manager/create-request">Создать запрос на поставку</a></li>
+            <li><a th:href="@{/sales/report}">Отправить отчет о продажах</a></li> <!-- Ссылка на отправку отчета -->
+<!--            <li><a th:href="@{/reports}">Просмотреть мои отчеты</a></li> &lt;!&ndash; Ссылка на просмотр отчетов &ndash;&gt;-->
         </ul>
     </section>
+
 </main>
 </body>
 </html>

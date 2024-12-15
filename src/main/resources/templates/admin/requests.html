@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Заявки</title>
+</head>
+<body>
+<header>
+  <h1>Заявки</h1>
+  <nav>
+    <a th:href="@{/admin/}">Вернуться в панель администратора</a>
+    <a href="/logout">Выйти</a>
+  </nav>
+</header>
+
+<main>
+  <table>
+    <thead>
+    <tr>
+      <th>ID</th>
+      <th>Магазин</th>
+      <th>Дата</th>
+      <th>Статус</th>
+      <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="request : ${requests}">
+      <td th:text="${request.id}"></td>
+      <td th:text="${request.storeId}"></td>
+      <td th:text="${request.requestDate}"></td>
+      <td th:text="${request.status}"></td>
+      <td>
+        <form th:action="@{/admin/approve-request}" method="post">
+          <input type="hidden" name="requestId" th:value="${request.id}">
+          <input type="hidden" name="storeId" th:value="${request.storeId}">
+
+          <!-- Проверьте названия полей в RequestDetail. Если используется quantity вместо quantityRequested, то: -->
+          <div th:each="detail : ${requestDetails}">
+            <input type="hidden" name="productIds[]" th:value="${detail.productId}">
+            <input type="hidden" name="quantities[]" th:value="${detail.quantity}">
+          </div>
+
+          <button type="submit">Одобрить</button>
+        </form>
+
+        <form th:action="@{/admin/reject-request}" method="post" style="display: inline;">
+          <input type="hidden" name="requestId" th:value="${request.id}">
+          <button type="submit">Отклонить</button>
+        </form>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</main>
+</body>
+</html>

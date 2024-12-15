@@ -66,6 +66,22 @@ public class StoreRepository {
         );
     }
 
+    public Store getStoreById(int storeId) {
+        String sql = "CALL get_store_by_id(?)";
+        return jdbcTemplate.queryForObject(sql,
+                (rs, rowNum) -> {
+                    Store store = new Store();
+                    store.setId(rs.getInt("id"));
+                    store.setName(rs.getString("name"));
+                    store.setAddress(rs.getString("address"));
+                    store.setPhoneNumber(rs.getString("phone_number"));
+                    store.setManagerName(rs.getString("manager_name"));
+                    return store;
+                },
+                storeId
+        );
+    }
+
     public List<SaleWithDetails> getSalesForMonth(int storeId) {
         LocalDate now = LocalDate.now();
         return jdbcTemplate.query(

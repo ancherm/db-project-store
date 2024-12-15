@@ -7,12 +7,18 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import ru.chermashentsev.dbproductstore.model.Product;
+import ru.chermashentsev.dbproductstore.model.*;
 import ru.chermashentsev.dbproductstore.repository.StoreRepository;
 import ru.chermashentsev.dbproductstore.service.ProductService;
+import ru.chermashentsev.dbproductstore.service.RequestService;
+import ru.chermashentsev.dbproductstore.service.SaleService;
 import ru.chermashentsev.dbproductstore.service.StoreService;
 
 import java.math.BigDecimal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -20,7 +26,9 @@ import java.math.BigDecimal;
 public class AdminController {
 
     private final StoreService storeService;
+    private final SaleService saleService;
     private final ProductService productService;
+    private final RequestService requestService;
 
     @GetMapping("/")
     public String adminIndex(Model model) {
@@ -92,6 +100,67 @@ public class AdminController {
         productService.deleteProduct(id);
         return "redirect:/admin/";
     }
+
+    @GetMapping("/requests")
+    public String showRequests(Model model) {
+        List<Request> requests = requestService.getAllRequests();
+        List<RequestDetail> requestDetails = requestService.getAllRequestDetails();
+
+        System.out.println(requests);
+        System.out.println(requestDetails);
+
+        model.addAttribute("requests", requests);
+        model.addAttribute("requestDetails", requestDetails);
+
+        return "admin/requests";
+    }
+
+    @PostMapping("/approve-request")
+    public String approveRequest(
+            @RequestParam int requestId,
+            @RequestParam int storeId,
+            @RequestParam("productIds") int[] productIds,
+            @RequestParam("quantities") int[] quantities) {
+        System.out.println("RequestId: " + requestId);
+        System.out.println("StoreId: " + storeId);
+
+        if (productIds.length != quantities.length) {
+            throw new IllegalArgumentException("Несоответствие между количеством продуктов и их идентификаторами");
+        }
+
+        Map<Integer, Integer> productQuantityMap = new HashMap<>();
+        for (int i = 0; i < productIds.length; i++) {
+            productQuantityMap.put(productIds[i], quantities[i]);
+        }
+
+        requestService.approveRequest(requestId, storeId, productQuantityMap);
+
+        return "redirect:/admin/requests";
+    }
+
+
+
+    @PostMapping("/reject-request")
+    public String rejectRequest(@RequestParam int requestId) {
+        requestService.rejectRequest(requestId);
+        return "redirect:/admin/requests";
+    }
+
+
+    @GetMapping("/sales")
+    public String listGroupedSales(Model model) {
+        List<Store> stores = storeService.getAllStores();
+        model.addAttribute("stores", stores);
+        return "admin/select-store";
+    }
+
+    @GetMapping("/sales/reports")
+    public String listGroupedSalesByStore(@RequestParam("storeId") int storeId, Model model) {
+        List<GroupedSales> groupedSales = saleService.getGroupedSalesByStore(storeId);
+        model.addAttribute("groupedSales", groupedSales);
+        return "sales/grouped-reports";
+    }
+
 
 }
 

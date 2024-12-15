@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Отчёты по магазинам</title>
+</head>
+<body>
+<h1>Отчёты о продажах, сгруппированные по магазинам</h1>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Магазин</th>
+    <th>Дата отчёта</th>
+    <th>Идентификатор продукта</th>
+    <th>Количество проданных единиц</th>
+  </tr>
+  </thead>
+  <tbody>
+  <!-- Группируем по магазинам и датам -->
+  <tr th:each="group : ${groupedSales}">
+    <td th:text="${group.storeName}" rowspan="${#lists.size(group.sales)}"></td>
+    <td th:text="${group.reportDate}" rowspan="${#lists.size(group.sales)}"></td>
+    <td th:text="${group.sales[0].productId}"></td>
+    <td th:text="${group.sales[0].totalQuantitySold}"></td>
+  </tr>
+  <!-- Отображаем оставшиеся продукты -->
+  <tr th:each="sale, iterStat : ${group.sales}" th:if="${iterStat.index > 0}">
+    <td th:text="${sale.productId}"></td>
+    <td th:text="${sale.totalQuantitySold}"></td>
+  </tr>
+  </tbody>
+</table>
+<a th:href="@{/admin}">Назад на главную</a>
+</body>
+</html>

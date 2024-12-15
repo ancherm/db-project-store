@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Выбор магазина</title>
+</head>
+<body>
+<h1>Выберите магазин для просмотра отчётов</h1>
+<form method="get" th:action="@{/admin/sales/reports}">
+    <select name="storeId">
+        <option th:each="store : ${stores}" th:value="${store.id}" th:text="${store.name}"></option>
+    </select>
+    <button type="submit">Посмотреть отчёты</button>
+</form>
+<a th:href="@{/admin}">Назад</a>
+</body>
+</html>

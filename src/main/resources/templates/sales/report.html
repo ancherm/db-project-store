@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Отчёт о продажах</title>
+</head>
+<body>
+<h1>Отчёт о продажах за месяц</h1>
+<table border="1">
+  <thead>
+  <tr>
+    <th>Идентификатор продажи</th>
+    <th>Идентификатор продукта</th>
+    <th>Количество проданных единиц</th>
+    <th>Дата продажи</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="sale : ${sales}">
+    <td th:text="${sale.id}"></td>
+    <td th:text="${sale.productId}"></td>
+    <td th:text="${sale.quantitySold}"></td>
+    <td th:text="${sale.saleDate}"></td>
+  </tr>
+  </tbody>
+</table>
+
+<!-- Кнопка отправки отчёта -->
+<form method="post" th:action="@{/sales/sendReport}">
+  <button type="submit">Отправить отчёт администратору</button>
+</form>
+
+<a th:href="@{/}">Назад на главную</a>
+</body>
+</html>

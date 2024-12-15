@@ -11,10 +11,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import ru.chermashentsev.dbproductstore.model.ProductWithQuantity;
 import ru.chermashentsev.dbproductstore.model.SaleWithDetails;
 import ru.chermashentsev.dbproductstore.model.Store;
-import ru.chermashentsev.dbproductstore.service.StoreService;
-import ru.chermashentsev.dbproductstore.service.UserService;
+import ru.chermashentsev.dbproductstore.service.*;
 
+import java.sql.Date;
+import java.time.LocalDate;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/manager")
@@ -22,6 +25,9 @@ import java.util.List;
 public class ManagerController {
 
     private final StoreService storeService;
+    private final SaleService saleService;
+    private final ProductService productService;
+    private final RequestService requestService;
     private final UserService userService;
 
 
@@ -56,16 +62,52 @@ public class ManagerController {
             Model model) {
         String username = authentication.getName();
 
-        // Проверка совпадения нового пароля и подтверждения
         if (!newPassword.equals(confirmPassword)) {
             model.addAttribute("error", "Пароли не совпадают.");
             return "manager/change-password";
         }
 
-        // Обновление пароля через сервис
         userService.updatePassword(username, newPassword);
         model.addAttribute("success", "Пароль успешно изменен.");
         return "manager/change-password";
+    }
+
+
+    @GetMapping("/create-request")
+    public String showCreateRequestForm(Model model) {
+        model.addAttribute("products", productService.getAll());
+        return "manager/create-request";
+    }
+
+    @PostMapping("/create-request")
+    public String createRequest(
+            Authentication authentication,
+            @RequestParam Map<String, String> productQuantities) {
+        int storeId = storeService.getStoreByManager(authentication.getName()).getId();
+
+        int requestId = requestService.createRequest(storeId, Date.valueOf(LocalDate.now()));
+
+        productQuantities.forEach((productIdStr, quantityStr) -> {
+            try {
+                int productId = Integer.parseInt(productIdStr);
+                int quantity = quantityStr.isEmpty() ? 0 : Integer.parseInt(quantityStr);
+
+                if (quantity > 0) {
+                    requestService.addRequestDetail(requestId, productId, quantity);
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Ошибка преобразования строки в число: " + e.getMessage());
+            }
+        });
+
+        return "redirect:/manager/";
+    }
+
+    @PostMapping("/sendReport")
+    public String sendSalesReport(Authentication authentication) {
+        String username = authentication.getName();
+        saleService.sendReport(username);
+        return "redirect:/sales/report";
     }
 
 
