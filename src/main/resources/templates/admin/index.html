@@ -9,7 +9,7 @@
 <nav>
     <ul>
         <li><a th:href="@{/admin/create-store}">Создать новый магазин</a></li>
-        <!-- Добавьте другие ссылки для управления магазинами -->
+        <li><a th:href="@{/admin/add-product}">Добавить новый продукт</a></li>
     </ul>
 </nav>
 
@@ -17,7 +17,7 @@
 <table>
     <thead>
     <tr>
-        <th>ID</th>
+<!--        <th>ID</th>-->
         <th>Название</th>
         <th>Адрес</th>
         <th>Телефон</th>
@@ -26,11 +26,34 @@
     </thead>
     <tbody>
     <tr th:each="store : ${stores}">
-        <td th:text="${store.id}"></td>
+<!--        <td th:text="${store.id}"></td>-->
         <td th:text="${store.name}"></td>
         <td th:text="${store.address}"></td>
         <td th:text="${store.phoneNumber}"></td>
         <td th:text="${store.managerName}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<h2>Список товаров</h2>
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Название</th>
+        <th>Цена</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.id}"></td>
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.unitPrice}"></td>
+        <td>
+            <a th:href="@{/admin/edit-product/{id}(id=${product.id})}">Изменить</a> |
+            <a th:href="@{/admin/delete-product/{id}(id=${product.id})}" onclick="return confirm('Вы уверены?');">Удалить</a>
+        </td>
     </tr>
     </tbody>
 </table>

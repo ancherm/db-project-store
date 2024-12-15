@@ -27,7 +27,7 @@ public class RequestRepository {
                     request.setId(rs.getInt("id"));
                     request.setStoreId(rs.getInt("store_id"));
                     request.setRequestDate(rs.getDate("request_date"));
-                    request.setRequestStatus(rs.getString("request_status"));
+                    request.setStatus(rs.getString("request_status"));
                     return request;
                 }
         );

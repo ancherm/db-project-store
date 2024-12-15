@@ -3,6 +3,8 @@ package ru.chermashentsev.dbproductstore.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import ru.chermashentsev.dbproductstore.model.ProductWithQuantity;
+import ru.chermashentsev.dbproductstore.model.SaleWithDetails;
 import ru.chermashentsev.dbproductstore.model.Store;
 import ru.chermashentsev.dbproductstore.repository.StoreRepository;
 
@@ -27,6 +29,14 @@ public class StoreService {
 
     public Store getStoreByManager(String username) {
         return storeRepository.getStoreByManager(username);
+    }
+
+    public List<ProductWithQuantity> getStoreInventory(int storeId) {
+        return storeRepository.getStoreInventory(storeId);
+    }
+
+    public List<SaleWithDetails> getSalesForMonth(int storeId) {
+        return storeRepository.getSalesForMonth(storeId);
     }
 
 

@@ -8,9 +8,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import ru.chermashentsev.dbproductstore.model.ProductWithQuantity;
+import ru.chermashentsev.dbproductstore.model.SaleWithDetails;
 import ru.chermashentsev.dbproductstore.model.Store;
 import ru.chermashentsev.dbproductstore.service.StoreService;
 import ru.chermashentsev.dbproductstore.service.UserService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/manager")
@@ -26,6 +30,15 @@ public class ManagerController {
         String username = authentication.getName();
         Store store = storeService.getStoreByManager(username);
         model.addAttribute("store", store);
+
+        int storeId = storeService.getStoreByManager(username).getId();
+
+        List<ProductWithQuantity> inventory = storeService.getStoreInventory(storeId);
+        List<SaleWithDetails> sales = storeService.getSalesForMonth(storeId);
+
+        model.addAttribute("inventory", inventory);
+        model.addAttribute("sales", sales);
+
         return "manager/index";
     }
 
@@ -54,5 +67,7 @@ public class ManagerController {
         model.addAttribute("success", "Пароль успешно изменен.");
         return "manager/change-password";
     }
+
+
 
 }

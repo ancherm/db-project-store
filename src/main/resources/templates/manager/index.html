@@ -21,12 +21,66 @@
             <p><strong>Телефон:</strong> <span th:text="${store.phoneNumber}">Телефон магазина</span></p>
         </div>
     </section>
-
+    <br>
+    <br>
+    <br>
+    <br>
+    <section>
+        <h2>Товары в наличии</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Цена</th>
+                <th>Количество</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${inventory}">
+                <td th:text="${product.name}"></td>
+                <td th:text="${product.category}"></td>
+                <td th:text="${product.unitPrice}"></td>
+                <td th:text="${product.quantity}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+    <br>
+    <br>
+    <br>
+    <br>
+    <section>
+        <h2>Проданные товары за месяц</h2>
+        <table>
+            <thead>
+            <tr>
+                <th>Название</th>
+                <th>Категория</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Дата продажи</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sale : ${sales}">
+                <td th:text="${sale.name}"></td>
+                <td th:text="${sale.category}"></td>
+                <td th:text="${sale.unitPrice}"></td>
+                <td th:text="${sale.quantitySold}"></td>
+                <td th:text="${sale.saleDate}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+<br>
+<br>
+<br>
+<br>
     <section>
         <h2>Действия</h2>
         <ul>
             <li><a href="/requests/create">Создать запрос на поставку</a></li>
-            <li><a href="/sales">Просмотреть продажи</a></li>
             <li><a href="/manager/change-password">Изменить пароль</a></li>
         </ul>
     </section>

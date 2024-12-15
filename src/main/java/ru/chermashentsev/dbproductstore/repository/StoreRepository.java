@@ -3,8 +3,9 @@ package ru.chermashentsev.dbproductstore.repository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import ru.chermashentsev.dbproductstore.model.Store;
+import ru.chermashentsev.dbproductstore.model.*;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -49,5 +50,40 @@ public class StoreRepository {
         );
     }
 
+    public List<ProductWithQuantity> getStoreInventory(int storeId) {
+        return jdbcTemplate.query(
+                "CALL get_store_inventory(?)",
+                (rs, rowNum) -> {
+                    ProductWithQuantity product = new ProductWithQuantity();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setCategory(rs.getString("category"));
+                    product.setUnitPrice(rs.getBigDecimal("unit_price"));
+                    product.setQuantity(rs.getInt("quantity"));
+                    return product;
+                },
+                storeId
+        );
+    }
+
+    public List<SaleWithDetails> getSalesForMonth(int storeId) {
+        LocalDate now = LocalDate.now();
+        return jdbcTemplate.query(
+                "CALL get_sales_for_month(?, ?, ?)",
+                (rs, rowNum) -> {
+                    SaleWithDetails sale = new SaleWithDetails();
+                    sale.setSaleId(rs.getInt("sale_id"));
+                    sale.setStoreId(rs.getInt("store_id"));
+                    sale.setProductId(rs.getInt("product_id"));
+                    sale.setProductName(rs.getString("product_name"));
+                    sale.setProductCategory(rs.getString("product_category"));
+                    sale.setUnitPrice(rs.getBigDecimal("unit_price"));
+                    sale.setQuantitySold(rs.getInt("quantity_sold"));
+                    sale.setSaleDate(rs.getDate("sale_date"));
+                    return sale;
+                },
+                storeId, now.getMonthValue(), now.getYear()
+        );
+    }
 
 }

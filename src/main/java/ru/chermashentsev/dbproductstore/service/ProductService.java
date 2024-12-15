@@ -18,8 +18,20 @@ public class ProductService {
         return productsRepository.findAll();
     }
 
+    public void addProduct(Product product) {
+        productsRepository.addProduct(product);
+    }
 
     public int getStoreInventory(int storeId, int productId) {
         return productsRepository.getStoreInventory(storeId, productId);
     }
+
+    public void updateProduct(Product product) {
+        productsRepository.updateProduct(product);
+    }
+
+    public void deleteProduct(int id) {
+        productsRepository.deleteProduct(id);
+    }
+
 }

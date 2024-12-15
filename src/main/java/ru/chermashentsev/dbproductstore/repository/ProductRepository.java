@@ -35,4 +35,26 @@ public class ProductRepository {
         return jdbcTemplate.queryForObject(sql, new Object[]{storeId, productId}, Integer.class);
     }
 
+    public void addProduct(Product product) {
+        jdbcTemplate.update(
+                "CALL add_product_to_company(?, ?, ?)",
+                product.getName(),
+                product.getCategory(),
+                product.getUnitPrice()
+        );
+    }
+
+    public void updateProduct(Product product) {
+        jdbcTemplate.update(
+                "CALL update_product(?, ?, ?)",
+                product.getId(),
+                product.getName(),
+                product.getUnitPrice()
+        );
+    }
+
+    public void deleteProduct(int id) {
+        jdbcTemplate.update("CALL delete_product(?)", id);
+    }
+
 }
