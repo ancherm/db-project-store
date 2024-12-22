@@ -45,7 +45,6 @@ public class SalesRepository {
     }
 
 
-
     public List<Map<String, Object>> getStoreSalesForLastMonth(int storeId) {
         String sql = "CALL get_store_sales_for_last_month(?)";
         return jdbcTemplate.queryForList(sql, storeId);
@@ -107,39 +106,40 @@ public class SalesRepository {
 
     public List<GroupedSales> getGroupedSalesByStore(int storeId) {
         String sql = "CALL get_grouped_sales_by_store(?)";
-        return jdbcTemplate.query(sql, new Object[]{storeId}, rs -> {
-            List<GroupedSales> groupedSalesList = new ArrayList<>();
-            GroupedSales currentGroup = null;
+        return jdbcTemplate.query(sql, rs -> {
+                    List<GroupedSales> groupedSalesList = new ArrayList<>();
+                    GroupedSales currentGroup = null;
 
-            while (rs.next()) {
-                String storeName = rs.getString("store_name");
-                LocalDate reportDate = rs.getDate("report_date").toLocalDate();
-                int productId = rs.getInt("product_id");
-                int totalQuantitySold = rs.getInt("total_quantity_sold");
+                    while (rs.next()) {
+                        String storeName = rs.getString("store_name");
+                        LocalDate reportDate = rs.getDate("report_date").toLocalDate();
+                        int productId = rs.getInt("product_id");
+                        int totalQuantitySold = rs.getInt("total_quantity_sold");
 
-                if (currentGroup == null || !currentGroup.getReportDate().equals(reportDate)) {
-                    currentGroup = new GroupedSales();
-                    currentGroup.setStoreName(storeName);
-                    currentGroup.setReportDate(reportDate);
-                    currentGroup.setSales(new ArrayList<>());
-                    groupedSalesList.add(currentGroup);
-                }
+                        if (currentGroup == null || !currentGroup.getReportDate().equals(reportDate)) {
+                            currentGroup = new GroupedSales();
+                            currentGroup.setStoreName(storeName);
+                            currentGroup.setReportDate(reportDate);
+                            currentGroup.setSales(new ArrayList<>());
+                            groupedSalesList.add(currentGroup);
+                        }
 
-                ProductSales productSales = new ProductSales();
-                productSales.setProductId(productId);
-                productSales.setTotalQuantitySold(totalQuantitySold);
-                currentGroup.getSales().add(productSales);
-            }
+                        ProductSales productSales = new ProductSales();
+                        productSales.setProductId(productId);
+                        productSales.setTotalQuantitySold(totalQuantitySold);
+                        currentGroup.getSales().add(productSales);
+                    }
 
-            return groupedSalesList;
-        });
+                    return groupedSalesList;
+                },
+                storeId
+        );
     }
 
     public void markSalesAsReported(int storeId) {
         String sql = "CALL mark_sales_as_reported(?)";
         jdbcTemplate.update(sql, storeId);
     }
-
 
 
 }

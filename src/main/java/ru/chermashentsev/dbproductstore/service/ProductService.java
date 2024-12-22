@@ -23,6 +23,10 @@ public class ProductService {
         productRepository.addProduct(product);
     }
 
+    public Product getById(int id) {
+        return productRepository.getById(id);
+    }
+
     public List<Product> getProductsByStoreId(int storeId) {
         return productRepository.getProductsByStoreId(storeId);
     }

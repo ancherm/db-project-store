@@ -11,7 +11,12 @@
         <li><a th:href="@{/admin/create-store}">Создать новый магазин</a></li>
         <li><a th:href="@{/admin/add-product}">Добавить новый продукт</a></li>
         <li><a th:href="@{/admin/requests}">Просмотреть заявки</a></li>
-        <li><a th:href="@{/sales/reports}">Просмотреть отчеты о продажах</a></li> <!-- Новая ссылка -->
+        <li><a th:href="@{/sales/reports}">Просмотреть отчеты о продажах</a></li>
+        <br>
+        <br>
+        <br>
+        <br>
+        <li><a th:href="@{/logout}">Выйти</a></li>
     </ul>
 </nav>
 
@@ -55,7 +60,7 @@
         <td th:text="${product.unitPrice}"></td>
         <td>
             <a th:href="@{/admin/edit-product/{id}(id=${product.id})}">Изменить</a> |
-            <a th:href="@{/admin/delete-product/{id}(id=${product.id})}" onclick="return confirm('Вы уверены?');">Удалить</a>
+<!--            <a th:href="@{/admin/delete-product/{id}(id=${product.id})}" onclick="return confirm('Вы уверены?');">Удалить</a>-->
         </td>
     </tr>
     </tbody>

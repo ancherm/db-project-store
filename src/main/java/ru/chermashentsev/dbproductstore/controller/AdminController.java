@@ -3,10 +3,7 @@ package ru.chermashentsev.dbproductstore.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import ru.chermashentsev.dbproductstore.model.*;
 import ru.chermashentsev.dbproductstore.repository.StoreRepository;
 import ru.chermashentsev.dbproductstore.service.ProductService;
@@ -42,6 +39,8 @@ public class AdminController {
         return "admin/create-store";
     }
 
+
+
     @PostMapping("/create-store")
     public String createStoreWithManager(
             @RequestParam String name,
@@ -70,8 +69,8 @@ public class AdminController {
         return "redirect:/admin/";
     }
 
-    @GetMapping("/edit-product")
-    public String editProductForm(@RequestParam int id, Model model) {
+    @GetMapping("/edit-product/{id}")
+    public String editProductForm(@PathVariable int id, Model model) {
         Product product = productService.getAll().stream()
                 .filter(p -> p.getId() == id)
                 .findFirst()
@@ -80,23 +79,24 @@ public class AdminController {
         return "admin/edit-product";
     }
 
-    @PostMapping("/edit-product")
+    @PostMapping("/edit-product/{id}")
     public String editProduct(
-            @RequestParam int id,
+            @PathVariable int id,
             @RequestParam String name,
-            @RequestParam String category,
             @RequestParam BigDecimal unitPrice) {
-        Product product = new Product();
-        product.setId(id);
+        Product product = productService.getById(id);
+        if (product == null) {
+            throw new RuntimeException("Продукт с ID " + id + " не найден");
+        }
         product.setName(name);
-        product.setCategory(category);
         product.setUnitPrice(unitPrice);
         productService.updateProduct(product);
         return "redirect:/admin/";
     }
 
-    @GetMapping("/delete-product")
-    public String deleteProduct(@RequestParam int id) {
+
+    @GetMapping("/delete-product/{id}")
+    public String deleteProduct(@PathVariable int id) {
         productService.deleteProduct(id);
         return "redirect:/admin/";
     }
@@ -157,6 +157,7 @@ public class AdminController {
     @GetMapping("/sales/reports")
     public String listGroupedSalesByStore(@RequestParam("storeId") int storeId, Model model) {
         List<GroupedSales> groupedSales = saleService.getGroupedSalesByStore(storeId);
+        System.out.println("GS: " + groupedSales);
         model.addAttribute("groupedSales", groupedSales);
         return "sales/grouped-reports";
     }

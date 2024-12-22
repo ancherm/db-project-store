@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.chermashentsev.dbproductstore.model.Product;
 import ru.chermashentsev.dbproductstore.model.ProductWithQuantity;
 import ru.chermashentsev.dbproductstore.model.Store;
+import ru.chermashentsev.dbproductstore.service.ProductService;
 
 import java.util.List;
 
@@ -28,6 +29,28 @@ public class ProductRepository {
                     return product;
                 }
         );
+    }
+
+    public Product getById(int id) {
+        String sql = "{CALL product_get_by_id(?)}";
+        System.out.println("Ищем продукт с ID: " + id);
+
+        Product product2 = jdbcTemplate.queryForObject(
+                sql,
+                new Object[]{id},
+                (rs, rowNum) -> {
+                    Product product = new Product();
+                    product.setId(rs.getInt("id"));
+                    product.setName(rs.getString("name"));
+                    product.setCategory(rs.getString("category"));
+                    product.setUnitPrice(rs.getBigDecimal("unit_price"));
+                    return product;
+                }
+        );
+
+        System.out.println("PDUCT: " + product2);
+
+        return product2;
     }
 
     public List<ProductWithQuantity> findProductsWithQuantityByStoreId(int storeId) {
